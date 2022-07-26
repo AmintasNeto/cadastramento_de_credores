@@ -16,61 +16,53 @@ class _UpdatePageState extends State<UpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Atualizar cadastro"),
+        title: const Text("Cadastro"),
       ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "\tAlterar nome:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, height: 2),
+            Card(
+              child: Row(
+                children: [
+                  const Icon(Icons.account_circle, size: 62,),
+                  Text(
+                    widget.cadastros[widget.index].nome,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            TextField(
-              controller: TextEditingController()..text = widget.cadastros[widget.index].nome,
-              onChanged: (value) {
-                if(value != ""){
-                  widget.cadastros[widget.index].nome = value;
-                }
-              },
+            Center(
+              child: Card(
+                margin: const EdgeInsets.only(
+                  top: 25,
+                ),
+                child: Text(
+                  "  Data de emissao: ${widget.cadastros[widget.index].emissao}\n"
+                      "Prazo: ${widget.cadastros[widget.index].prazo}",
+                  style: const TextStyle(
+                    fontSize: 19,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ),
             ),
-            const Text(
-              "\tAlterar dara de emissao:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, height: 2),
-            ),
-            TextField(
-              controller: TextEditingController()..text = widget.cadastros[widget.index].emissao,
-              onChanged: (value) {
-                if(value.length == 8){
-                  widget.cadastros[widget.index].emissao = value;
-                }
-              },
-            ),
-            const Text(
-              "\tAlterar prazo:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, height: 2),
-            ),
-            TextField(
-              controller: TextEditingController()..text = widget.cadastros[widget.index].prazo,
-              onChanged: (value) {
-                if(value.length == 8){
-                  widget.cadastros[widget.index].prazo = value;
-                }
-              },
-            ),
-            const Text(
-              "\tValor da divida:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, height: 2),
-            ),
-            TextField(
-              controller: TextEditingController()..text = widget.cadastros[widget.index].valor.toString(),
-              onChanged: (value) {
-                value.replaceAll(",", ".");
-                double valor = double.parse(value);
-                if(valor > 0.0){
-                  widget.cadastros[widget.index].valor = valor;
-                }
-              },
+            Center(
+              child: Card(
+                margin: const EdgeInsets.only(
+                  top: 25,
+                ),
+                child: Text(
+                  "  Dívida: RS ${widget.cadastros[widget.index].valor}  ",
+                  style: const TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

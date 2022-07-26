@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String password = "";
   bool showErrorUsername = false;
   bool showErrorPassword = false;
+  Map<String,String> logins = {"picanhaassada02@aleatorio.com" : "Churrasquinho09"};
 
   @override
   Widget build(BuildContext context) {
@@ -109,26 +110,26 @@ class _MyHomePageState extends State<MyHomePage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  if (username == "") {
-                    showErrorUsername = true;
-                  } else {
-                    showErrorUsername = false;
-                  }
-                  if (password == "") {
-                    showErrorPassword = true;
-                  } else {
-                    showErrorPassword = false;
+                  showErrorUsername = username == "" ? true : false;
+                  showErrorPassword = password == "" ? true : false;
+                  if (username != "" && password != "") {
+                    if(logins.containsKey(username)){
+                      if(logins[username] == password){
+                        Data cadastro = Data(nome: "", emissao: "", prazo: "", valor: 0.0);
+                        List<Data> cadastros = [];
+                        Navigator.push(context, PageRouteBuilder(pageBuilder:
+                            (BuildContext context, Animation<double> animation,
+                            Animation<double> secAnimation) {
+                          return RegisterPage(cadastro: cadastro, cadastros: cadastros,);
+                        }));
+                      } else {
+                        showErrorPassword = true;
+                      }
+                    } else {
+                      showErrorUsername = true;
+                    }
                   }
                   setState(() {});
-                  if (username != "" && password != "") {
-                    Data cadastro = Data(nome: "", emissao: "", prazo: "", valor: 0.0);
-                    List<Data> cadastros = [];
-                    Navigator.push(context, PageRouteBuilder(pageBuilder:
-                        (BuildContext context, Animation<double> animation,
-                            Animation<double> secAnimation) {
-                      return RegisterPage(cadastro: cadastro, cadastros: cadastros,);
-                    }));
-                  }
                 },
                 child: const Text(
                   "Fazer Login",
