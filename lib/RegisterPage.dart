@@ -8,14 +8,16 @@ import 'models.dart';
 class RegisterPage extends StatefulWidget {
   final Data cadastro;
   final List<Data> cadastros;
-  const RegisterPage({Key? key, required this.cadastro, required this.cadastros}) : super(key: key);
+
+  const RegisterPage(
+      {Key? key, required this.cadastro, required this.cadastros})
+      : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   late String nome;
   bool nomeError = false;
   late String emissao;
@@ -24,36 +26,41 @@ class _RegisterPageState extends State<RegisterPage> {
   bool prazoError = false;
   late double valor;
   bool valorError = false;
+  bool sucessSaveMessage = false;
 
   @override
-  initState(){
+  initState() {
     nome = widget.cadastro.nome;
     emissao = widget.cadastro.emissao;
     prazo = widget.cadastro.prazo;
     valor = widget.cadastro.valor;
   }
 
-  void validacoes(){
-    if(nome == ""){
+  void validacoes() {
+    if (nome == "") {
       nomeError = true;
+      sucessSaveMessage = false;
     } else {
       nomeError = false;
     }
 
-    if(valor == 0.0){
+    if (valor == 0.0) {
       valorError = true;
+      sucessSaveMessage = false;
     } else {
       valorError = false;
     }
 
-    if(emissao == ""){
+    if (emissao == "") {
       emissaoError = true;
+      sucessSaveMessage = false;
     } else {
       emissaoError = false;
     }
 
-    if(prazo == ""){
+    if (prazo == "") {
       prazoError = true;
+      sucessSaveMessage = false;
     } else {
       prazoError = false;
     }
@@ -120,8 +127,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 color: valorError ? Colors.red : Colors.grey,
               ),
               child: TextField(
-                controller: TextEditingController()..text = valor != 0.0 ? valor.toString() : "",
-               onChanged: (value) {
+                controller: TextEditingController()
+                  ..text = valor != 0.0 ? valor.toString() : "",
+                onChanged: (value) {
                   value.replaceAll(",", ".");
                   valor = double.parse(value);
                 },
@@ -197,45 +205,67 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             Flexible(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 40.0,
-                    left: 150.0
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    validacoes();
-                    setState(() {});
-                    if(nome != "" && valor != 0.0 && emissao != "" && prazo != ""){
-                      Data cadastro = Data(
-                        nome: nome,
-                        valor: valor,
-                        emissao: emissao,
-                        prazo: prazo,
-                      );
-                      widget.cadastros.add(cadastro);
-                    }
-                  },
-                  child: const Text(
-                    "Cadastrar",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              child: Visibility(
+                visible: sucessSaveMessage,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    top: 35.0,
+                    bottom: 25.0,
+                    left: 100
                   ),
-                )
+                  child: Text(
+                    "Credor cadastrado com sucesso",
+                    style: TextStyle(
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
               ),
+            ),
+            Flexible(
+              child: Padding(
+                  padding: const EdgeInsets.only(top: 40.0, left: 150.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      validacoes();
+                      setState(() {});
+                      if (nome != "" &&
+                          valor != 0.0 &&
+                          emissao != "" &&
+                          prazo != "") {
+                        Data cadastro = Data(
+                          nome: nome,
+                          valor: valor,
+                          emissao: emissao,
+                          prazo: prazo,
+                        );
+                        widget.cadastros.add(cadastro);
+                        setState(() {
+                          nome = "";
+                          valor = 0.0;
+                          emissao = "";
+                          prazo = "";
+                          sucessSaveMessage = true;
+                        });
+                      }
+                    },
+                    child: const Text(
+                      "Cadastrar",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  )),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                  pageBuilder: (BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secAnimation) {
-                    return ListPage(cadastros: widget.cadastros);
-                  }));
+          Navigator.push(context, PageRouteBuilder(pageBuilder:
+              (BuildContext context, Animation<double> animation,
+                  Animation<double> secAnimation) {
+            return ListPage(cadastros: widget.cadastros);
+          }));
         },
         tooltip: 'List',
         child: const Icon(Icons.ad_units),
