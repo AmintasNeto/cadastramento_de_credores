@@ -8,29 +8,29 @@ class DB_helper {
   Future<LoginData> RequestUsers(String username) async {
     try {
       PostgreSQLConnection connection = PostgreSQLConnection(
-          "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com",
+          "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com",
           5432,
-          "projeto",
+          "Projeto",
           username: "Usuario",
           password: "Usuario01");
       await connection.open();
-      await connection.transaction((newLoginConn) async {
-        UserRegisterResult = await newLoginConn.query(
+      await connection.transaction((connection) async {
+        UserRegisterResult = await connection.query(
           "SELECT * FROM credores.usuario u "
           "JOIN credores.pessoa_fisica pf ON(u.id_usuario = pf.id_usuario) "
           "WHERE u.nome = '$username';",
           allowReuse: true,
           timeoutInSeconds: 30,
         );
-        await connection.close();
-        return LoginData(
-            id: UserRegisterResult![0][0],
-            nome: UserRegisterResult![0][1],
-            senha: UserRegisterResult![0][2],
-            email: UserRegisterResult![0][3],
-            cpf: UserRegisterResult![0][4],
-            nome_completo: UserRegisterResult![0][5]);
       });
+      await connection.close();
+      return LoginData(
+          id: UserRegisterResult![0][0],
+          nome: UserRegisterResult![0][1],
+          senha: UserRegisterResult![0][2],
+          email: UserRegisterResult![0][3],
+          cpf: UserRegisterResult![0][4],
+          nome_completo: UserRegisterResult![0][5]);
     } catch (exc) {
       if (kDebugMode) {
         print(exc);
@@ -49,9 +49,9 @@ class DB_helper {
       String nome_completo, int cpf) async {
     try {
       PostgreSQLConnection connection = PostgreSQLConnection(
-          "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com",
+          "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com",
           5432,
-          "projeto",
+          "Projeto",
           username: "Usuario",
           password: "Usuario01");
       await connection.open();
@@ -75,9 +75,9 @@ class DB_helper {
   Future<void> RegisterAdress(AdressData data, int id_usuario) async {
     try {
       PostgreSQLConnection connection = PostgreSQLConnection(
-          "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com",
+          "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com",
           5432,
-          "projeto",
+          "Projeto",
           username: "Usuario",
           password: "Usuario01");
       await connection.open();
@@ -113,7 +113,7 @@ class DB_helper {
 
   Future<List<AdressData>> getAdresses(int id_usuario) async {
     PostgreSQLConnection connection = PostgreSQLConnection(
-        "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "projeto",
+        "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "Projeto",
         username: "Usuario", password: "Usuario01");
     await connection.open();
     var result = await connection.query("SELECT * FROM credores.endereco "
@@ -136,7 +136,7 @@ class DB_helper {
   Future<void> DeleteAdress(
       int? id_endereco, int id_usuario, int numero) async {
     PostgreSQLConnection connection = PostgreSQLConnection(
-        "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "projeto",
+        "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "Projeto",
         username: "Usuario", password: "Usuario01");
     await connection.open();
     await connection.transaction((connection) async {
@@ -150,7 +150,7 @@ class DB_helper {
 
   Future<void> DeleteUser(int id_usuario) async {
     PostgreSQLConnection connection = PostgreSQLConnection(
-        "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "projeto",
+        "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "Projeto",
         username: "Usuario", password: "Usuario01");
     await connection.open();
     await connection.transaction((connection) async {
@@ -165,7 +165,7 @@ class DB_helper {
   Future<void> UpdateAdress(
       AdressData adress, int id_usuario, int old_number) async {
     PostgreSQLConnection connection = PostgreSQLConnection(
-        "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "projeto",
+        "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "Projeto",
         username: "Usuario", password: "Usuario01");
     await connection.open();
     try {
@@ -182,7 +182,7 @@ class DB_helper {
 
   Future<void> UpdateUserRegister(LoginData data) async {
     PostgreSQLConnection connection = PostgreSQLConnection(
-        "bd-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "projeto",
+        "db-projeto.cfqnxbl5thuy.us-east-1.rds.amazonaws.com", 5432, "Projeto",
         username: "Usuario", password: "Usuario01");
     await connection.open();
     await connection.transaction((connection) async {
