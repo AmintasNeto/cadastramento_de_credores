@@ -1,6 +1,6 @@
-import 'dart:ffi';
-import 'package:cadastramento_de_credores/ListPage.dart';
-import 'package:cadastramento_de_credores/RegisterPage.dart';
+import 'package:cadastramento_de_credores/AdressPage.dart';
+import 'package:cadastramento_de_credores/BD_helper.dart';
+import 'package:cadastramento_de_credores/SignUpPage.dart';
 import 'package:flutter/material.dart';
 import 'models.dart';
 
@@ -34,9 +34,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String username = "";
   String password = "";
-  bool showErrorUsername = false;
-  bool showErrorPassword = false;
-  Map<String,String> logins = {"picanhaassada02@aleatorio.com" : "Churrasquinho09"};
+  bool showError = false;
+  DB_helper db_helper = DB_helper();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "\tConta do Usuário:",
+              " Conta do Usuário:",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             AnimatedContainer(
@@ -62,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: 25.0,
               ),
               decoration: BoxDecoration(
-                color: showErrorUsername ? Colors.red : Colors.grey,
+                color: showError ? Colors.red : Colors.grey,
               ),
               child: TextField(
                 controller: TextEditingController()..text = username,
@@ -70,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   username = value;
                 },
                 decoration: const InputDecoration(
-                  hintText: "exemplo@dominio.com",
+                  hintText: "exemplo123",
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(
                     left: 5.0,
@@ -79,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             const Text(
-              "\tSenha do Usuário:",
+              " Senha do Usuário:",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             AnimatedContainer(
@@ -91,9 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: 45.0,
               ),
               decoration: BoxDecoration(
-                color: showErrorPassword ? Colors.red : Colors.grey,
+                color: showError ? Colors.red : Colors.grey,
               ),
               child: TextField(
+                obscureText: true,
                 controller: TextEditingController()..text = password,
                 onChanged: (value) {
                   password = value;
@@ -108,33 +108,59 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  showErrorUsername = username == "" ? true : false;
-                  showErrorPassword = password == "" ? true : false;
-                  if (username != "" && password != "") {
-                    if(logins.containsKey(username)){
-                      if(logins[username] == password){
-                        Data cadastro = Data(nome: "", emissao: "", prazo: "", valor: 0.0);
-                        List<Data> cadastros = [];
-                        Navigator.push(context, PageRouteBuilder(pageBuilder:
-                            (BuildContext context, Animation<double> animation,
-                            Animation<double> secAnimation) {
-                          return RegisterPage(cadastro: cadastro, cadastros: cadastros,);
-                        }));
-                      } else {
-                        showErrorPassword = true;
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      showError =
+                          username == "" || password == "" ? true : false;
+                      LoginData login = await db_helper.RequestUsers(username);
+                      if (username != "" && password != "") {
+                        if (login.nome == username) {
+                          if (login.senha == password) {
+                            showError = false;
+                            Navigator.push(context, PageRouteBuilder(
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secAnimation) {
+                              return AdressPage(login_data: login, isEditing: false,
+                              );
+                            }));
+                          } else {
+                            showError = true;
+                          }
+                        } else {
+                          showError = true;
+                        }
                       }
-                    } else {
-                      showErrorUsername = true;
-                    }
-                  }
-                  setState(() {});
-                },
-                child: const Text(
-                  "Fazer Login",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
+                      setState(() {
+                        showError = false;
+                      });
+                    },
+                    child: const Text(
+                      "Fazer Login",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 60),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context, PageRouteBuilder(pageBuilder:
+                              (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secAnimation) {
+                            return SignUpPage(isEditing: false,);
+                          }));
+                        },
+                        child: const Text(
+                          "Cadastrar usuario",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        )),
+                  )
+                ],
               ),
             )
           ],

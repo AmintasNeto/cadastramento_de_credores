@@ -1,16 +1,58 @@
-class Data {
+class LoginData {
+  late final int id;
   late final String nome;
-  late final String emissao;
-  late final String prazo;
-  late final double valor;
-  Data({required this.nome,required this.valor,required this.emissao,required this.prazo});
+  late final String senha;
+  late final List<String> email;
+  late final int cpf;
+  late final String nome_completo;
 
-  Map<String,dynamic> toMap(){
+  LoginData(
+      {required this.id,
+      required this.nome,
+      required this.senha,
+      required this.email,
+      required this.nome_completo,
+      required this.cpf});
+
+  Map<String, dynamic> toMap() {
     return {
-      'nome' : nome,
-      'emissao': emissao,
-      'prazo' : prazo,
-      'valor' : valor
+      'id': id,
+      'nome': nome,
+      'senha': senha,
+      'email': email,
+      'nome_completo': nome_completo,
+      'cpf': cpf
+    };
+  }
+}
+
+class AdressData {
+  late final int cep, numero;
+  int ?id_endereco;
+  late final String rua, bairro, cidade, estado, pais, complemento;
+
+  AdressData(
+      {required this.cep,
+      required this.rua,
+      required this.numero,
+      required this.bairro,
+      required this.cidade,
+      required this.estado,
+      required this.pais,
+      required this.complemento,
+      this.id_endereco});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'cep' : cep,
+      'rua' : rua,
+      'numero' : numero,
+      'bairro' : bairro,
+      'cidade' : cidade,
+      'estado' : estado,
+      'pais' : pais,
+      'complemento' : complemento,
+      'id_endereco' : id_endereco
     };
   }
 }
