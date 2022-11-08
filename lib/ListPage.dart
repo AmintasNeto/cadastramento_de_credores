@@ -55,7 +55,7 @@ class _ListPageState extends State<ListPage> {
                       });
                     },
                     leading: Text("${snapshot.data![index].cep}\n"
-                        "${snapshot.data![index].cidade}\n"
+                        "${snapshot.data![index].cidade} - ${snapshot.data![index].bairro}\n"
                         "${snapshot.data![index].estado}/"
                         "${snapshot.data![index].pais}"),
                     title: Text("${snapshot.data![index].rua}, "

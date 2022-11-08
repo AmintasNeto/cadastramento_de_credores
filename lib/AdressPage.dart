@@ -104,7 +104,9 @@ class _AdressPageState extends State<AdressPage> {
                             (BuildContext context, Animation<double> animation,
                                 Animation<double> secAnimation) {
                           return ListPage(login_data: loginData);
-                        }));
+                        })).then((value) {
+                          setState(() {});
+                        });
                       },
                       child: const Icon(Icons.list)),
                 ],

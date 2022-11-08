@@ -170,6 +170,9 @@ class DB_helper {
     await connection.open();
     try {
       RegisterAdress(adress, id_usuario);
+      await connection.query("DELETE FROM credores.localiza_se "
+          "WHERE id_endereco = ${adress.id_endereco} "
+          "AND id_usuario = $id_usuario AND numero = $old_number;");
     } catch (exc) {}
     await connection.query("UPDATE credores.localiza_se "
         "SET numero = ${adress.numero},"
