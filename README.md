@@ -1,16 +1,12 @@
 # cadastramento_de_credores
 
-A new Flutter project.
+Parte 3 do projeto de Banco de Dados 1.
 
-## Getting Started
+## Observações
+1 - O bando de dados está em uma máquina da aws na conta de Amintas Gomes de Moraes Neto.
 
-This project is a starting point for a Flutter application.
+2 - O tempo de resposta das querys variam e pode levar mais de 1 segundo para se obter o resultado.
 
-A few resources to get you started if this is your first Flutter project:
+3 - Os códigos onde encontra-se a lógica do app estão na pasta lib.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4 - O arquivo BD_helper.dart contém todas as funções utilizadas na comunicação do app com o SGBD.
